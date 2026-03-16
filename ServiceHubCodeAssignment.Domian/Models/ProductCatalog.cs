@@ -1,3 +1,5 @@
+using ServiceHubCodeAssignment.Domian.Models;
+
 namespace ServiceHubCodeAssignment.Domain.Models;
 
 public class ProductCatalog
