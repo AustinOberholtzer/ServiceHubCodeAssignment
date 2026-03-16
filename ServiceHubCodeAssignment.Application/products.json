@@ -1,0 +1,111 @@
+{
+  "products": [
+    {
+      "id": "chainsaws",
+      "name": "Chainsaws",
+      "description": "Professional and consumer chainsaws engineered for the most demanding forestry work.",
+      "category": "Category",
+      "imageUrl": null,
+      "variants": [
+        {
+          "id": "572-xp-mark-ii",
+          "name": "572 XP\u00ae Mark II",
+          "description": "A high-performance professional chainsaw with X-Torq\u00ae engine technology delivering maximum power with minimal fuel consumption and emissions.",
+          "category": "Chainsaw",
+          "imageUrl": "https://www-static-nw.husqvarna.com/-/images/aprimo/husqvarna/chainsaws/photos/studio/h/h110/04/h110-0461.webp?v=885b3821148fd9b9&format=WEBP_LANDSCAPE_CONTAIN_XXL"
+        },
+        {
+          "id": "550-xbt-mark-ii",
+          "name": "550 XBT Mark II",
+          "description": "A versatile X-Torq\u00ae chainsaw with AutoTune\u2122 for fully automatic carburettor adjustment, eliminating manual tuning in all conditions.",
+          "category": "Chainsaw",
+          "imageUrl": "https://www-static-nw.husqvarna.com/-/images/aprimo/husqvarna/chainsaws/photos/studio/h/h110/05/h110-0518.webp?v=ca384f9c148fd9b9&format=WEBP_LANDSCAPE_CONTAIN_XXL"
+        },
+        {
+          "id": "435e-ii",
+          "name": "435e II",
+          "description": "A lightweight and easy-to-start chainsaw ideal for landowners and occasional users. Air Injection\u2122 keeps the air filter clean longer.",
+          "category": "Chainsaw",
+          "imageUrl": "https://www-static-nw.husqvarna.com/-/images/aprimo/husqvarna/chainsaws/photos/studio/g/gi/gi-766314.webp?v=76a8fb72148fd9b9&format=WEBP_LANDSCAPE_CONTAIN_XXL"
+        }
+      ]
+    },
+    {
+      "id": "trimmers",
+      "name": "String Trimmers",
+      "description": "Powerful and ergonomic trimmers for professional and residential lawn care.",
+      "category": "Category",
+      "imageUrl": null,
+      "variants": [
+        {
+          "id": "525-lst",
+          "name": "525LST",
+          "description": "A professional straight-shaft trimmer offering excellent reach under bushes and along fence lines, with low vibration and X-Torq\u00ae engine.",
+          "category": "Trimmer",
+          "imageUrl": ""
+        },
+        {
+          "id": "535-lk",
+          "name": "535LK",
+          "description": "A loop-handle professional trimmer designed for comfort during prolonged use in dense vegetation and open areas.",
+          "category": "Trimmer",
+          "imageUrl": ""
+        },
+        {
+          "id": "545-rx",
+          "name": "545RX",
+          "description": "A high-powered brushcutter combining trimmer versatility with the capacity to clear heavy brush and saplings efficiently.",
+          "category": "Trimmer",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "id": "leaf-blowers",
+      "name": "Leaf Blowers",
+      "description": "Efficient backpack blowers for professional-grade clearing tasks with reduced fatigue.",
+      "category": "Category",
+      "imageUrl": null,
+      "variants": [
+        {
+          "id": "570-bts",
+          "name": "570BTS",
+          "description": "A powerful backpack blower with X-Torq\u00ae engine for sustained professional use. Delivers exceptional air volume with reduced fuel consumption.",
+          "category": "Leaf Blower",
+          "imageUrl": ""
+        },
+        {
+          "id": "350-bt",
+          "name": "350BT",
+          "description": "A lightweight backpack blower ideal for homeowners who need reliable power without excessive weight during seasonal clean-up.",
+          "category": "Leaf Blower",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "id": "hedge-trimmers",
+      "name": "Hedge Trimmers",
+      "description": "Precision hedge trimmers that deliver clean, professional cuts across all hedge types and sizes.",
+      "category": "Category",
+      "imageUrl": null,
+      "variants": [
+        {
+          "id": "122-hd45",
+          "name": "122HD45",
+          "description": "A lightweight and well-balanced hedge trimmer with a 45 cm double-sided blade, perfect for maintaining small to medium hedges.",
+          "category": "Hedge Trimmer",
+          "imageUrl": ""
+        },
+        {
+          "id": "327-hed60x",
+          "name": "327HED60X",
+          "description": "A professional articulated hedge trimmer with a 60 cm double-sided blade and fully adjustable cutting head for complex topiary shapes.",
+          "category": "Hedge Trimmer",
+          "imageUrl": ""
+        }
+      ]
+    }
+  ]
+}
+
