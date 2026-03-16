@@ -80,7 +80,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
         {
             Products = new ObservableCollection<ProductInfo>(viewModels);
 
-            StatusMessage = $"Last updated: {DateTime.Now:HH:mm:ss}";
+            StatusMessage = $"Updated: {DateTime.Now:HH:mm:ss}";
         });
     }
 
