@@ -1,4 +1,4 @@
-namespace ServiceHubCodeAssignment.Domian.Models;
+namespace ServiceHubCodeAssignment.Domain.Models;
 
 public class Product
 {

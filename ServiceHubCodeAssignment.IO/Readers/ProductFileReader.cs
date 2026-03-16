@@ -1,6 +1,6 @@
 using System.Text.Json;
 using ServiceHubCodeAssignment.Core.Readers;
-using ServiceHubCodeAssignment.Domian.Models;
+using ServiceHubCodeAssignment.Domain.Models;
 
 namespace ServiceHubCodeAssignment.IO.Readers;
 

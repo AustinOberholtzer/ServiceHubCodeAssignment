@@ -1,13 +1,18 @@
 using ServiceHubCodeAssignment.Core.Readers;
-using ServiceHubCodeAssignment.Domian.Models;
+using ServiceHubCodeAssignment.Domain.Models;
 
 namespace ServiceHubCodeAssignment.Core.Services;
 
-public sealed class ProductMonitorService(IProductReader reader) : IProductMonitorService
+public sealed class ProductMonitorService(
+    IProductReader reader,
+    Func<string, DateTime>? getLastWriteTimeUtc = null) : IProductMonitorService
 {
+    private readonly Func<string, DateTime> _getLastWriteTimeUtc =
+        getLastWriteTimeUtc ?? File.GetLastWriteTimeUtc;
+
     private PeriodicTimer? _periodicTimer;
     private Task? _monitorTask;
-    private CancellationTokenSource? _cenCancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
     private DateTime _lastWriteTime;
 
     public event EventHandler<ProductCatalog>? CatalogChanged;
@@ -15,16 +20,13 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
 
     public void Start(string filePath, int intervalMilliseconds = 1000)
     {
-        _cenCancellationTokenSource = new CancellationTokenSource();
-        _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMilliseconds));
-
         if (string.IsNullOrEmpty(filePath))
-        {
             return;
-        }
 
+        _cancellationTokenSource = new CancellationTokenSource();
+        _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMilliseconds));
         _lastWriteTime = File.GetLastWriteTimeUtc(filePath);
-        _monitorTask = MonitorAsync(filePath, _cenCancellationTokenSource.Token);
+        _monitorTask = MonitorAsync(filePath, _cancellationTokenSource.Token);
     }
 
     private async Task MonitorAsync(string filePath, CancellationToken cancellationToken)
@@ -33,17 +35,14 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
         {
             try
             {
-                var writeTime = File.GetLastWriteTimeUtc(filePath);
+                DateTime writeTime = _getLastWriteTimeUtc(filePath);
 
                 if (writeTime == _lastWriteTime)
-                {
                     continue;
-                }
 
                 _lastWriteTime = writeTime;
 
-                var catalog = await reader.ReadAsync(filePath, cancellationToken);
-
+                ProductCatalog catalog = await reader.ReadAsync(filePath, cancellationToken);
                 CatalogChanged?.Invoke(this, catalog);
             }
             catch (OperationCanceledException)
@@ -59,18 +58,15 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
 
     public async ValueTask DisposeAsync()
     {
-        if (_cenCancellationTokenSource is not null)
+        if (_cancellationTokenSource is not null)
         {
-            await _cenCancellationTokenSource.CancelAsync();
-
-            _cenCancellationTokenSource.Dispose();
+            await _cancellationTokenSource.CancelAsync();
+            _cancellationTokenSource.Dispose();
         }
 
         _periodicTimer?.Dispose();
 
         if (_monitorTask is not null)
-        {
             await _monitorTask;
-        }
     }
 }

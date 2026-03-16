@@ -20,4 +20,15 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\ServiceHubCodeAssignment.IO\ServiceHubCodeAssignment.IO.csproj"/>
+        <ProjectReference Include="..\ServiceHubCodeAssignment.Core\ServiceHubCodeAssignment.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\ServiceHubCodeAssignment.Application\products.json" Link="products.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>

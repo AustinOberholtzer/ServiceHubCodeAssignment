@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ServiceHubCodeAssignment.Domian\ServiceHubCodeAssignment.Domian.csproj"/>
+        <ProjectReference Include="..\ServiceHubCodeAssignment.Domain\ServiceHubCodeAssignment.Domain.csproj" />
     </ItemGroup>
 
 </Project>

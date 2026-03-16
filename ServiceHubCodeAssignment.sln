@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHubCodeAssignment.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHubCodeAssignment.IO", "ServiceHubCodeAssignment.IO\ServiceHubCodeAssignment.IO.csproj", "{5FE857C6-BE4B-4307-8120-501F77DC0F52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHubCodeAssignment.Domian", "ServiceHubCodeAssignment.Domian\ServiceHubCodeAssignment.Domian.csproj", "{261BD466-9045-42BE-8B1B-1DF7752E2C6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHubCodeAssignment.Domain", "ServiceHubCodeAssignment.Domain\ServiceHubCodeAssignment.Domain.csproj", "{261BD466-9045-42BE-8B1B-1DF7752E2C6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHubCodeAssignment.Test", "ServiceHubCodeAssignment.Test\ServiceHubCodeAssignment.Test.csproj", "{CA9E1F88-27D7-40AD-8BE3-9526C166B12A}"
 EndProject

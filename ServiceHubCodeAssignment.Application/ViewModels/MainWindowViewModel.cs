@@ -6,7 +6,7 @@ using ServiceHubCodeAssignment.Application.Configuration;
 using ServiceHubCodeAssignment.Application.Models;
 using ServiceHubCodeAssignment.Core.Readers;
 using ServiceHubCodeAssignment.Core.Services;
-using ServiceHubCodeAssignment.Domian.Models;
+using ServiceHubCodeAssignment.Domain.Models;
 
 namespace ServiceHubCodeAssignment.Application.ViewModels;
 
