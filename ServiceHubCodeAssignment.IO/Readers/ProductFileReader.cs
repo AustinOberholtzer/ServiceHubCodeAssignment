@@ -13,16 +13,13 @@ public sealed class ProductFileReader : IProductReader
 
     public async Task<ProductCatalog> ReadAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(fileName))
-        {
-            throw new ArgumentNullException(nameof(fileName), "The product catalog file name must be provided.");
-        }
+        ArgumentException.ThrowIfNullOrEmpty(fileName);
 
         fileName = Path.GetFullPath(fileName, AppContext.BaseDirectory);
 
         if (!File.Exists(fileName))
         {
-            throw new FileNotFoundException("The product catalog was not found.");
+            throw new FileNotFoundException("The product catalog file was not found.", fileName);
         }
 
         try
@@ -34,19 +31,7 @@ public sealed class ProductFileReader : IProductReader
         }
         catch (JsonException ex)
         {
-            throw new InvalidDataException($"The product catalog contains invalid JSON and could not be deserialized.", ex);
-        }
-        catch (IOException ex)
-        {
-            throw new IOException("The product catalog could not be read.", ex);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("An unexpected error occurred when reading the product catalog.", ex);
+            throw new InvalidDataException("The product catalog contains invalid JSON and could not be deserialized.", ex);
         }
     }
 }
