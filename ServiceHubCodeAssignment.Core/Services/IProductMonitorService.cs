@@ -6,6 +6,6 @@ public interface IProductMonitorService : IAsyncDisposable
 {
     event EventHandler<ProductCatalog>? CatalogChanged;
 
-    void Start(string filePath);
+    void Start(string filePath, int intervalMilliseconds);
 }
 
