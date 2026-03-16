@@ -19,7 +19,7 @@ public partial class App
             })
             .ConfigureServices((context, services) =>
             {
-                services.Configure<AppSettings>(context.Configuration.GetSection(AppSettings.SectionName));
+                services.Configure<AppSettings>(context.Configuration.GetSection(nameof(AppSettings)));
 
                 services.AddTransient<MainWindow>();
             })

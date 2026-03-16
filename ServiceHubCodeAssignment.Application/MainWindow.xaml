@@ -8,7 +8,7 @@
         Title="Service Hub - Code Assignment"
         Height="450"
         Width="800"
-        Icon="favicon.ico">
+        Icon="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,32 +17,21 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Text="Services"
+                   Text="Husqvarna Handheld Products"
                    FontSize="20"
                    FontWeight="Bold"
                    Margin="10,10,10,5"/>
 
-        <DataGrid Grid.Row="1"
-                  x:Name="ServicesDataGrid"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  AlternatingRowBackground="#F5F5F5"
-                  Margin="10,0,10,5">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"          Binding="{Binding Id}"          Width="40"/>
-                <DataGridTextColumn Header="Name"        Binding="{Binding Name}"         Width="180"/>
-                <DataGridTextColumn Header="Category"    Binding="{Binding Category}"     Width="100"/>
-                <DataGridTextColumn Header="Status"      Binding="{Binding Status}"       Width="80"/>
-                <DataGridTextColumn Header="Owner"       Binding="{Binding Owner}"        Width="130"/>
-                <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated}" Width="110"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}"  Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
 
-        <Label Grid.Row="2"
+        <TextBlock Grid.Row="2"
                HorizontalAlignment="Right"
-               Margin="0,0,10,5">
-            Austin Oberholtzer
-        </Label>
+               Margin="0,0,10,5"
+               FontSize="9">
+            <Hyperlink
+                NavigateUri="mailto:austinoberholtzer@gmail.com"
+                RequestNavigate="Hyperlink_OnRequestNavigate">
+                <Run Text="Austin Oberholtzer"/>
+            </Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>

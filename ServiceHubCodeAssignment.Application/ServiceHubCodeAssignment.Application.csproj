@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <None Remove="favicon.ico" />
-      <Resource Include="favicon.ico" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +20,10 @@
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Images\favicon.ico" />
     </ItemGroup>
 
 </Project>
