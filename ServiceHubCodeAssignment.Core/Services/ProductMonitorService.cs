@@ -29,9 +29,9 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
 
     private async Task MonitorAsync(string filePath, CancellationToken cancellationToken)
     {
-        try
+        while (await _periodicTimer!.WaitForNextTickAsync(cancellationToken))
         {
-            while (await _periodicTimer!.WaitForNextTickAsync(cancellationToken))
+            try
             {
                 var writeTime = File.GetLastWriteTimeUtc(filePath);
 
@@ -46,14 +46,14 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
 
                 CatalogChanged?.Invoke(this, catalog);
             }
-        }
-        catch (OperationCanceledException)
-        {
-            // Expected when shutting down.
-        }
-        catch (Exception ex)
-        {
-            ErrorOccurred?.Invoke(this, ex);
+            catch (OperationCanceledException)
+            {
+                // Expected when shutting down.
+            }
+            catch (Exception ex)
+            {
+                ErrorOccurred?.Invoke(this, ex);
+            }
         }
     }
 
@@ -74,4 +74,3 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
         }
     }
 }
-
