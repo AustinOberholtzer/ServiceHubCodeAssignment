@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Time.Testing;
 using ServiceHubCodeAssignment.Core.Services;
 using ServiceHubCodeAssignment.Domain.Models;
 using ServiceHubCodeAssignment.IO.Readers;
@@ -8,36 +7,33 @@ namespace ServiceHubCodeAssignment.Test;
 [TestFixture]
 public class ProductMonitorServiceTests
 {
+    private const int TimeoutSeconds = 5;
+
     [Test]
-    public async Task Monitor_DetectsNoChangeOnFirstTick_ThenDetectsChangeOnSecondTick()
+    public async Task ProductMonitorTest()
     {
         string filePath = Path.GetFullPath("products.json", AppContext.BaseDirectory);
         string originalContent = await File.ReadAllTextAsync(filePath);
 
-        var timeProvider = new FakeTimeProvider();
-        var interval = TimeSpan.FromSeconds(2);
+        var firstCheckSource = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var catalogChangedSource = new TaskCompletionSource<ProductCatalog>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        var taskCompletionSource = new TaskCompletionSource<ProductCatalog>(TaskCreationOptions.RunContinuationsAsynchronously);
+        await using var service = new ProductMonitorService(new ProductFileReader());
 
-        await using var service = new ProductMonitorService(new ProductFileReader(), timeProvider);
-
-        service.CatalogChanged += (_, catalog) => taskCompletionSource.TrySetResult(catalog);
+        service.FileChecked += (_, _) => firstCheckSource.TrySetResult(true);
+        service.CatalogChanged += (_, catalog) => catalogChangedSource.TrySetResult(catalog);
 
         try
         {
             service.Start(filePath);
 
-            timeProvider.Advance(interval);
+            await firstCheckSource.Task.WaitAsync(TimeSpan.FromSeconds(TimeoutSeconds));
 
-            await Task.Yield();
-
-            Assert.That(taskCompletionSource.Task.IsCompleted, Is.False, "CatalogChanged should not be raised when the file has not changed.");
+            Assert.That(catalogChangedSource.Task.IsCompleted, Is.False, "CatalogChanged should not be raised when the file has not changed.");
 
             await ModifyProductCatalog(originalContent, filePath);
 
-            timeProvider.Advance(interval);
-
-            var changedCatalog = await taskCompletionSource.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            var changedCatalog = await catalogChangedSource.Task.WaitAsync(TimeSpan.FromSeconds(TimeoutSeconds));
 
             Assert.That(changedCatalog.Products, Is.Not.Empty);
             Assert.That(changedCatalog.Products[0].Name, Is.EqualTo("Chainsaws (Updated)"));

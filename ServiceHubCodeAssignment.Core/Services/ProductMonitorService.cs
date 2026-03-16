@@ -4,11 +4,8 @@ using ServiceHubCodeAssignment.Domain.Models;
 namespace ServiceHubCodeAssignment.Core.Services;
 
 public sealed class ProductMonitorService(
-    IProductReader reader,
-    TimeProvider? timeProvider = null) : IProductMonitorService
+    IProductReader reader) : IProductMonitorService
 {
-    private readonly TimeProvider _timeProvider = timeProvider ?? TimeProvider.System;
-
     private PeriodicTimer? _periodicTimer;
     private Task? _monitorTask;
     private CancellationTokenSource? _cancellationTokenSource;
@@ -16,14 +13,17 @@ public sealed class ProductMonitorService(
 
     public event EventHandler<ProductCatalog>? CatalogChanged;
     public event EventHandler<Exception>? ErrorOccurred;
+    public event EventHandler<bool>? FileChecked;
 
-    public void Start(string filePath, int intervalMilliseconds = 1000)
+    public void Start(string filePath, int intervalMilliseconds = 2000)
     {
         if (string.IsNullOrEmpty(filePath))
+        {
             return;
+        }
 
         _cancellationTokenSource = new CancellationTokenSource();
-        _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMilliseconds), _timeProvider);
+        _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMilliseconds));
         _lastWriteTime = File.GetLastWriteTimeUtc(filePath);
         _monitorTask = MonitorAsync(filePath, _cancellationTokenSource.Token);
     }
@@ -34,19 +34,20 @@ public sealed class ProductMonitorService(
         {
             while (await _periodicTimer!.WaitForNextTickAsync(cancellationToken))
             {
+                bool changed = false;
                 try
                 {
                     DateTime writeTime = File.GetLastWriteTimeUtc(filePath);
 
-                    if (writeTime == _lastWriteTime)
+                    if (writeTime != _lastWriteTime)
                     {
-                        continue;
+                        _lastWriteTime = writeTime;
+                        changed = true;
+
+                        ProductCatalog catalog = await reader.ReadAsync(filePath, cancellationToken);
+                        
+                        CatalogChanged?.Invoke(this, catalog);
                     }
-
-                    _lastWriteTime = writeTime;
-
-                    ProductCatalog catalog = await reader.ReadAsync(filePath, cancellationToken);
-                    CatalogChanged?.Invoke(this, catalog);
                 }
                 catch (Exception ex)
                 {
@@ -54,6 +55,14 @@ public sealed class ProductMonitorService(
                     {
                         ErrorOccurred?.Invoke(this, ex);
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    FileChecked?.Invoke(this, changed);
                 }
             }
         }

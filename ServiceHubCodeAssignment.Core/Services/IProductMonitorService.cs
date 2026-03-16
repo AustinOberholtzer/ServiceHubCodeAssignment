@@ -6,7 +6,7 @@ public interface IProductMonitorService : IAsyncDisposable
 {
     event EventHandler<ProductCatalog>? CatalogChanged;
     event EventHandler<Exception>? ErrorOccurred;
+    event EventHandler<bool>? FileChecked;
 
-    void Start(string filePath, int intervalMilliseconds);
+    void Start(string filePath, int intervalMilliseconds = 1000);
 }
-
