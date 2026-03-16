@@ -3,6 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServiceHubCodeAssignment.Application.Configuration;
+using ServiceHubCodeAssignment.Application.ViewModels;
+using ServiceHubCodeAssignment.Core.Readers;
+using ServiceHubCodeAssignment.Core.Services;
+using ServiceHubCodeAssignment.IO.Readers;
 
 namespace ServiceHubCodeAssignment.Application;
 
@@ -19,8 +23,12 @@ public partial class App
             })
             .ConfigureServices((context, services) =>
             {
-                services.Configure<AppSettings>(context.Configuration.GetSection(nameof(AppSettings)));
+                services.Configure<AppSettings>(context.Configuration.GetSection(AppSettings.SectionName));
 
+                services.AddSingleton<IProductReader, ProductFileReader>();
+                services.AddSingleton<IProductMonitorService, ProductMonitorService>();
+
+                services.AddTransient<MainWindowViewModel>();
                 services.AddTransient<MainWindow>();
             })
             .Build();
@@ -39,7 +47,15 @@ public partial class App
     protected override async void OnExit(ExitEventArgs e)
     {
         await _host.StopAsync();
-        _host.Dispose();
+
+        if (_host is IAsyncDisposable asyncHost)
+        {
+            await asyncHost.DisposeAsync();
+        }
+        else
+        {
+            _host.Dispose();
+        }
 
         base.OnExit(e);
     }

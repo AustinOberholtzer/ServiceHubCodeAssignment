@@ -2,6 +2,8 @@ namespace ServiceHubCodeAssignment.Application.Configuration;
 
 public class AppSettings
 {
-    public string? ProductFilePath { get; }
+    public const string SectionName = "AppSettings";
+
+    public string ProductsFilePath { get; init; } = "products.json";
 }
 
