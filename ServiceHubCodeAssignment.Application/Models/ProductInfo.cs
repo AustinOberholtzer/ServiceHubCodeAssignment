@@ -1,4 +1,3 @@
-using ServiceHubCodeAssignment.Domain.Models;
 using ServiceHubCodeAssignment.Domian.Models;
 
 namespace ServiceHubCodeAssignment.Application.Models;

@@ -3,34 +3,152 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ServiceHubCodeAssignment"
+        xmlns:viewModels="clr-namespace:ServiceHubCodeAssignment.Application.ViewModels"
+        xmlns:models="clr-namespace:ServiceHubCodeAssignment.Application.Models"
         mc:Ignorable="d"
-        Title="Service Hub - Code Assignment"
-        Height="450"
-        Width="800"
-        Icon="/Resources/Images/favicon.ico">
+        Title="Husqvarna Products"
+        Height="680"
+        Width="1050"
+        MinHeight="450"
+        MinWidth="640"
+        Icon="/favicon.ico"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel}">
+
+    <Window.Resources>
+        <HierarchicalDataTemplate
+            DataType="{x:Type models:ProductInfo}"
+            ItemsSource="{Binding Variants}">
+            <TextBlock
+                Padding="2,2"
+                Text="{Binding Name}" />
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="Husqvarna Handheld Products"
-                   FontSize="20"
-                   FontWeight="Bold"
-                   Margin="10,10,10,5"/>
+        <TextBlock
+            Grid.Row="0"
+            Text="Husqvarna Products"
+            FontSize="22"
+            Padding="10"
+            FontWeight="Bold"
+            Foreground="White"
+            Background="#273a60"
+            VerticalAlignment="Center" />
 
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" MinWidth="160" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" MinWidth="250" />
+            </Grid.ColumnDefinitions>
+
+            <TreeView Grid.Column="0"
+                      ItemsSource="{Binding Products}"
+                      SelectedItemChanged="OnTreeViewSelectedItemChanged"
+                      BorderThickness="0,0,1,0"
+                      Padding="6" />
+
+            <GridSplitter Grid.Column="1"
+                          HorizontalAlignment="Stretch"
+                          Background="#DDDDDD" />
+
+            <Grid Grid.Column="2">
+
+                <TextBlock Text="Select a product from the tree to view details."
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="#AAAAAA"
+                           FontSize="14">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedProduct}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <ScrollViewer DataContext="{Binding SelectedProduct}"
+                              VerticalScrollBarVisibility="Auto"
+                              Padding="22,18">
+                    <ScrollViewer.Style>
+                        <Style TargetType="ScrollViewer">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ScrollViewer.Style>
+
+                    <StackPanel>
+                        <Border Background="White"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,16">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ImageUrl}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Image Source="{Binding ImageUrl}"
+                                   MaxHeight="220"
+                                   MaxWidth="330"
+                                   Stretch="Uniform" />
+                        </Border>
+
+                        <TextBlock Text="{Binding Name}"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="#333333"
+                                   TextWrapping="Wrap" />
+
+                        <TextBlock Text="{Binding Category}"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Margin="0,5,0,0" />
+
+                        <Separator Margin="0,12" />
+
+                        <TextBlock Text="{Binding Description}"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"
+                                   Foreground="#444444"
+                                   LineHeight="22" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <StatusBar Grid.Row="2" Background="#F0F0F0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" Margin="6,0" />
+            </StatusBarItem>
+        </StatusBar>
 
         <TextBlock Grid.Row="2"
-               HorizontalAlignment="Right"
-               Margin="0,0,10,5"
-               FontSize="9">
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="0,0,10,5"
+                   FontSize="9">
             <Hyperlink
                 NavigateUri="mailto:austinoberholtzer@gmail.com"
                 RequestNavigate="Hyperlink_OnRequestNavigate">
-                <Run Text="Austin Oberholtzer"/>
+                <Run Text="- Austin Oberholtzer" />
             </Hyperlink>
         </TextBlock>
     </Grid>

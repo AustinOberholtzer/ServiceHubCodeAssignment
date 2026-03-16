@@ -1,5 +1,5 @@
 using ServiceHubCodeAssignment.Core.Readers;
-using ServiceHubCodeAssignment.Domain.Models;
+using ServiceHubCodeAssignment.Domian.Models;
 
 namespace ServiceHubCodeAssignment.Core.Services;
 
@@ -11,13 +11,19 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
     private DateTime _lastWriteTime;
 
     public event EventHandler<ProductCatalog>? CatalogChanged;
+    public event EventHandler<Exception>? ErrorOccurred;
 
     public void Start(string filePath, int intervalMilliseconds = 1000)
     {
         _cenCancellationTokenSource = new CancellationTokenSource();
         _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(intervalMilliseconds));
-        _lastWriteTime = File.GetLastWriteTimeUtc(filePath);
 
+        if (string.IsNullOrEmpty(filePath))
+        {
+            return;
+        }
+
+        _lastWriteTime = File.GetLastWriteTimeUtc(filePath);
         _monitorTask = MonitorAsync(filePath, _cenCancellationTokenSource.Token);
     }
 
@@ -27,20 +33,27 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
         {
             while (await _periodicTimer!.WaitForNextTickAsync(cancellationToken))
             {
-                DateTime writeTime = File.GetLastWriteTimeUtc(filePath);
+                var writeTime = File.GetLastWriteTimeUtc(filePath);
 
                 if (writeTime == _lastWriteTime)
+                {
                     continue;
+                }
 
                 _lastWriteTime = writeTime;
 
-                ProductCatalog catalog = await reader.ReadAsync(filePath, cancellationToken);
+                var catalog = await reader.ReadAsync(filePath, cancellationToken);
+
                 CatalogChanged?.Invoke(this, catalog);
             }
         }
         catch (OperationCanceledException)
         {
             // Expected when shutting down.
+        }
+        catch (Exception ex)
+        {
+            ErrorOccurred?.Invoke(this, ex);
         }
     }
 
@@ -49,6 +62,7 @@ public sealed class ProductMonitorService(IProductReader reader) : IProductMonit
         if (_cenCancellationTokenSource is not null)
         {
             await _cenCancellationTokenSource.CancelAsync();
+
             _cenCancellationTokenSource.Dispose();
         }
 

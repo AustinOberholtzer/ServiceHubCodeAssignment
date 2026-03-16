@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="favicon.ico" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2"/>
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5"/>
     </ItemGroup>
@@ -21,14 +17,23 @@
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="products.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ServiceHubCodeAssignment.IO\ServiceHubCodeAssignment.IO.csproj"/>
       <ProjectReference Include="..\ServiceHubCodeAssignment.Core\ServiceHubCodeAssignment.Core.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="products.json" />
+      <Content Include="products.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="favicon.ico" />
+      <Resource Include="favicon.ico" />
     </ItemGroup>
 
 </Project>

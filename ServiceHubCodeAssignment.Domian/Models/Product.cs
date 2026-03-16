@@ -1,6 +1,6 @@
 namespace ServiceHubCodeAssignment.Domian.Models;
 
-public abstract class Product
+public class Product
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
